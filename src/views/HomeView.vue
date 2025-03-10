@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import useFetch from '@/composables/useFetch';
+import usePlanetStore from '@/stores/usePlanetStore';
 import type { PlanetResponse } from '@/types/planet';
-import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const page = ref('https://swapi.dev/api/planets');
-const { data: planets, loading, error } = useFetch<PlanetResponse>(page);
+//const { data: planets, loading, error } = useFetch<PlanetResponse>(page);
+//const { setPlanets } = usePlanetsStore();
+/*
+watch(planets, () => {
+  if (planets.value) setPlanets(planets.value.results);
+});*/
 
+const { planets } = storeToRefs(usePlanetStore());
+
+console.log(planets);
 const demo = ref('demo');
 
 const handleClick = () => {
@@ -17,6 +27,7 @@ const handleClick = () => {
 </script>
 
 <template>
+  <RouterLink :to="{ name: 'planetReactive' }">planetReactive</RouterLink>
   <RouterLink
     :to="{
       name: 'about',
@@ -25,16 +36,13 @@ const handleClick = () => {
     }"
     >About</RouterLink
   >
+  <RouterLink :to="{ name: 'planets' }">Planets</RouterLink>
   <button @click="router.push({ name: 'about' })">About</button>
-  <div v-if="loading">Loading...</div>
-  <div v-else-if="error">Error: {{ error }}</div>
   <ul>
-    <li v-for="planet in planets?.results" :key="planet.name">
+    <li v-for="planet in planets" :key="planet.name">
       {{ planet.name }}
     </li>
   </ul>
-  <button @click="page = planets?.previous!" :disabled="!planets?.previous">prev</button>
-  <button @click="page = planets?.next!" :disabled="!planets?.next">next</button>
 
   <p>gdnifgh difjgoidjfg oidfgoidjfgo ijdfgo {{ demo }} sdfgkjsdhf sdiufhsdiu fhsiud fh</p>
   <button @click="handleClick">click</button>
