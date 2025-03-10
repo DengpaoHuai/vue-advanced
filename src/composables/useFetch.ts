@@ -1,15 +1,15 @@
-import { onMounted, ref } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 
-const useFetch = <T>(url: string) => {
+const useFetch = <T>(url: Ref<string>) => {
   const data = ref<T>();
   const loading = ref(true);
   const error = ref<Error | null>(null);
 
-  onMounted(() => {
-    fetch(url)
+  const getData = async () => {
+    fetch(url.value)
       .then((res) => res.json())
       .then((response) => {
-        data.value = response.results;
+        data.value = response;
       })
       .catch((err) => {
         if (err instanceof Error) {
@@ -19,8 +19,26 @@ const useFetch = <T>(url: string) => {
       .finally(() => {
         loading.value = false;
       });
-  });
+  };
 
+  watch(
+    url,
+    () => {
+      getData();
+    },
+    { immediate: true },
+  );
+
+  /* 
+  watchEffect(() => {
+    getData();
+  });
+*/
+
+  /*onMounted(() => {
+    getData();
+  });
+*/
   return {
     data,
     loading,
