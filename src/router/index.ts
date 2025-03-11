@@ -79,7 +79,7 @@ export const routes = [
       /* usePlanetStore().$subscribe((mutation) => {
         console.log(mutation);
       });*/
-      if (useMovieStore().movies.length === 0) await useMovieStore().getData();
+      // if (useMovieStore().movies.length === 0) await useMovieStore().getData();
       next();
     },
   },
@@ -87,6 +87,11 @@ export const routes = [
     name: 'create_movie',
     path: '/movies/create',
     component: () => import('../views/CreateMovie.vue'),
+  },
+  {
+    name: 'encore_planets',
+    path: '/encore-planets',
+    component: () => import('../views/PlanetViewTanstack.vue'),
   },
 ];
 

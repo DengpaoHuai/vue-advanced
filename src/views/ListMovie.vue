@@ -1,20 +1,44 @@
 <script setup lang="ts">
+import type { Movie } from '@/schemas/movie.schema';
+import { deleteMovie, getMovies } from '@/services/movies.service';
 import useMovieStore from '@/stores/useMovieStore';
-import usePlanetsStore from '@/stores/usePlanets';
-import { reactive, ref } from 'vue';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 
-const { movies, deleteData } = useMovieStore();
+const queryClient = useQueryClient();
 
-usePlanetsStore();
+const { data } = useQuery<Movie[]>({
+  queryKey: ['movies'],
+  queryFn: getMovies,
+});
+
+const { mutate } = useMutation({
+  mutationFn: (id: string) => deleteMovie(id),
+  onMutate: async (id: string) => {
+    const oldCache = queryClient.getQueryData<Movie[]>(['movies']);
+
+    queryClient.setQueryData<Movie[]>(['movies'], (oldMovies) => {
+      return oldMovies?.filter((movie) => movie._id !== id) || [];
+    });
+
+    return oldCache ?? [];
+  },
+  onError: (err, newTodo, oldCache) => {
+    queryClient.setQueryData<Movie[]>(['movies'], oldCache);
+  },
+  onSuccess: async (data) => {
+    queryClient.invalidateQueries({ queryKey: ['movies'] });
+    console.log(data);
+  },
+});
 </script>
 
 <template>
   <h1>List Movie</h1>
   <div>
     <ul>
-      <li v-for="movie in movies" :key="movie._id">
+      <li v-for="movie in data" :key="movie._id">
         {{ movie.title }}
-        <button @click="movie._id && deleteData(movie._id)">Delete</button>
+        <button @click="mutate(movie._id)">Delete</button>
       </li>
     </ul>
   </div>

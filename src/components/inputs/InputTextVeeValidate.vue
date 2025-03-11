@@ -2,8 +2,10 @@
 import { useField } from 'vee-validate';
 import { toRef, type Ref } from 'vue';
 import InputText from './InputText.vue';
+import type { Movie } from '@/schemas/movie.schema';
 
 const props = defineProps<{
+  //name: keyof Movie; // 'title' | 'description' | 'rating'
   name: string;
   type?: string;
 }>();
