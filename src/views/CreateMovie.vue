@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router';
 const { createData } = useMovieStore();
 const router = useRouter();
 
-const { handleSubmit } = useForm({
+const { handleSubmit, errors } = useForm({
   validationSchema: toTypedSchema(movieSchema),
 });
 
@@ -23,9 +23,12 @@ const submit = handleSubmit(async (values) => {
 
 <template>
   <h1>Create Movie</h1>
+  <div v-if="errors.title">{{ errors.title }}</div>
+  <div v-if="errors.description">{{ errors.description }}</div>
+  <div v-if="errors.rating">{{ errors.rating }}</div>
   <div>
     <form @submit.prevent="submit">
-      <InputTextVeeValidate name="titdle" />
+      <InputTextVeeValidate name="title" />
       <InputTextVeeValidate name="description" />
       <InputTextVeeValidate name="rating" />
       <button type="submit">Create</button>
