@@ -16,8 +16,8 @@ export const createMovie = async (movie: Omit<Movie, '_id'>) => {
   return response.data;
 };
 
-export const updateMovie = async (movie: Partial<Movie>) => {
-  const response = await crudcrud.put(`movies/${movie._id}`, movie);
+export const updateMovie = async (id: string, movie: Partial<Omit<Movie, '_id'>>) => {
+  const response = await crudcrud.put(`movies/${id}`, movie);
   return response.data;
 };
 
@@ -27,5 +27,10 @@ export const deleteMovie = async (id: string) => {
   await waitFor(2000);
 
   const response = await crudcrud.delete(`movies/${id}`);
+  return response.data;
+};
+
+export const getMovieById = async (id: string): Promise<Movie> => {
+  const response = await crudcrud.get(`movies/${id}`);
   return response.data;
 };

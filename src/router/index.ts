@@ -1,3 +1,5 @@
+import { myClient } from '@/main';
+import { getMovieById } from '@/services/movies.service';
 import useMovieStore from '@/stores/useMovieStore';
 import usePlanetStore from '@/stores/usePlanetStore';
 import {
@@ -89,9 +91,33 @@ export const routes = [
     component: () => import('../views/CreateMovie.vue'),
   },
   {
+    name: 'update_movie',
+    path: '/movies/update/:id',
+    component: () => import('../views/EditMovie.vue'),
+  },
+  {
     name: 'encore_planets',
     path: '/encore-planets',
     component: () => import('../views/PlanetViewTanstack.vue'),
+  },
+  {
+    path: '/movies/edit/:id',
+    name: 'edit_movie',
+    component: () => import('../views/EditMovie.vue'),
+    beforeEnter: async (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalizedLoaded,
+      next: NavigationGuardNext,
+    ) => {
+      const data = await myClient.prefetchQuery({
+        queryKey: ['movie', to.params.id],
+        queryFn: () => getMovieById(to.params.id as string),
+      });
+      if (data.error) {
+        next({ name: 'list_movies' });
+      }
+      next();
+    },
   },
 ];
 
