@@ -1,3 +1,4 @@
+import useMovieStore from '@/stores/useMovieStore';
 import usePlanetStore from '@/stores/usePlanetStore';
 import {
   createRouter,
@@ -22,8 +23,10 @@ export const routes = [
       from: RouteLocationNormalizedLoaded,
       next: NavigationGuardNext,
     ) => {
-      await usePlanetStore().getData();
-      usePlanetStore().$subscribe;
+      //  await usePlanetStore().getData();
+      /* usePlanetStore().$subscribe((mutation) => {
+        console.log(mutation);
+      });*/
       next();
     },
   },
@@ -62,6 +65,28 @@ export const routes = [
     name: 'planetReactive',
     path: '/planets-reactive',
     component: () => import('../views/PlanetViewReactive.vue'),
+  },
+  {
+    name: 'list_movies',
+    path: '/movies',
+    component: () => import('../views/ListMovie.vue'),
+    beforeEnter: async (
+      to: RouteLocationNormalized,
+      from: RouteLocationNormalizedLoaded,
+      next: NavigationGuardNext,
+    ) => {
+      //  await usePlanetStore().getData();
+      /* usePlanetStore().$subscribe((mutation) => {
+        console.log(mutation);
+      });*/
+      if (useMovieStore().movies.length === 0) await useMovieStore().getData();
+      next();
+    },
+  },
+  {
+    name: 'create_movie',
+    path: '/movies/create',
+    component: () => import('../views/CreateMovie.vue'),
   },
 ];
 

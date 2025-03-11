@@ -16,9 +16,10 @@ watch(planets, () => {
   if (planets.value) setPlanets(planets.value.results);
 });*/
 
-const { planets } = storeToRefs(usePlanetStore());
+const store = usePlanetStore();
+const { planets } = storeToRefs(store);
 
-console.log(planets);
+console.log(store);
 const demo = ref('demo');
 
 const handleClick = () => {
