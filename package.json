@@ -17,10 +17,13 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vee-validate/zod": "^4.15.0",
     "axios": "^1.8.2",
     "pinia": "^3.0.1",
+    "vee-validate": "^4.15.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.0",

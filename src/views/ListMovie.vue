@@ -3,7 +3,7 @@ import useMovieStore from '@/stores/useMovieStore';
 import usePlanetsStore from '@/stores/usePlanets';
 import { reactive, ref } from 'vue';
 
-const { movies } = useMovieStore();
+const { movies, deleteData } = useMovieStore();
 
 usePlanetsStore();
 </script>
@@ -12,8 +12,9 @@ usePlanetsStore();
   <h1>List Movie</h1>
   <div>
     <ul>
-      <li v-for="movie in movies" :key="movie.id">
+      <li v-for="movie in movies" :key="movie._id">
         {{ movie.title }}
+        <button @click="movie._id && deleteData(movie._id)">Delete</button>
       </li>
     </ul>
   </div>
