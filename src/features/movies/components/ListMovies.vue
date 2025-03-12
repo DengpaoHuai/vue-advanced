@@ -3,7 +3,9 @@ import useDeleteMovie from '@/features/movies/api/delete-movie';
 import { getMovieById } from '@/features/movies/api/get-movie';
 import useMovies from '@/features/movies/api/get-movies';
 
-const { data, suspense } = useMovies();
+const { data, suspense } = useMovies({
+  refetchOnWindowFocus: false,
+});
 
 const { mutate } = useDeleteMovie();
 
