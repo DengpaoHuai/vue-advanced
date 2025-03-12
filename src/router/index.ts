@@ -113,9 +113,9 @@ export const routes = [
         queryKey: ['movie', to.params.id],
         queryFn: () => getMovieById(to.params.id as string),
       });
-      if (data.error) {
+      /*  if (data.error) {
         next({ name: 'list_movies' });
-      }
+      }*/
       next();
     },
   },

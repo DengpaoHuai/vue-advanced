@@ -16,11 +16,10 @@ const movieId = ref(route.params.id as string);
 const { data: movie, isLoading } = useQuery({
   queryKey: ['movie', movieId],
   queryFn: () => getMovieById(movieId.value),
-  staleTime: 60000,
 });
 
 // Configuration du formulaire avec valeurs initiales
-const { handleSubmit, errors, resetForm } = useForm({
+const { handleSubmit, errors, resetForm, values } = useForm({
   validationSchema: toTypedSchema(movieSchema),
   initialValues: {
     title: movie.value?.title ?? '',
@@ -28,6 +27,7 @@ const { handleSubmit, errors, resetForm } = useForm({
     rating: movie.value?.rating.toString() ?? '',
   },
 });
+
 /*
 // Mise à jour du formulaire quand les données sont chargées
 watchEffect(() => {
@@ -48,17 +48,18 @@ const queryClient = useQueryClient();
 // Configuration de la mutation pour la mise à jour
 const { mutateAsync, isPending } = useMutation({
   mutationKey: ['updateMovie', movieId],
-  mutationFn: async (movieData: Movie) => updateMovie(movieId.value, movieData),
-  onSuccess: () => {
+  mutationFn: async (movieData: Omit<Movie, '_id'>) => updateMovie(movieId.value, movieData),
+  onSuccess: (movieData) => {
+    console.log(values);
     queryClient.setQueryData<Movie[]>(['movies'], (oldMovies) => {
       return (
         oldMovies?.map((movie) => {
           if (movie._id === movieId.value) {
             return {
               ...movie,
-              title: movieData.title,
-              description: movieData.description,
-              rating: movieData.rating,
+              title: values.title,
+              description: values.description,
+              rating: values.rating,
             };
           }
           return movie;
@@ -77,7 +78,6 @@ const submit = handleSubmit(async (values) => {
   mutationError.value = null;
   await mutateAsync({
     ...values,
-    _id: movieId.value, // Ajout de l'ID requis par le schema
   });
 });
 </script>

@@ -37,7 +37,6 @@ const prefetchData = (id: string) => {
   queryClient.prefetchQuery<Movie[]>({
     queryKey: ['movie', id],
     queryFn: () => getMovieById(id),
-    staleTime: 60000,
   });
 };
 </script>

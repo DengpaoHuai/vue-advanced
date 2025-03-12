@@ -15,7 +15,7 @@ app.use(createPinia());
 app.use(router);
 
 export const myClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 3600 } },
+  defaultOptions: { queries: { staleTime: 0, refetchOnWindowFocus: true } },
 });
 const vueQueryPluginOptions: VueQueryPluginOptions = {
   queryClient: myClient,
