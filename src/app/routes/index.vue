@@ -3,7 +3,7 @@ import useFetch from '@/composables/useFetch';
 import usePlanetStore from '@/stores/usePlanetStore';
 import type { PlanetResponse } from '@/types/planet';
 import { storeToRefs } from 'pinia';
-import { ref, watch } from 'vue';
+import { inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -25,9 +25,15 @@ const demo = ref('demo');
 const handleClick = () => {
   demo.value = 'clicked';
 };
+
+const { demo: demo1 } = inject('super');
+console.log(demo1);
 </script>
 
 <template>
+  <SuperWelcome></SuperWelcome>
+  <button @click="demo1('demo')">increment</button>
+  <input type="text" v-focus v-model="demo" />
   <RouterLink :to="{ name: 'planetReactive' }">planetReactive</RouterLink>
   <RouterLink
     :to="{

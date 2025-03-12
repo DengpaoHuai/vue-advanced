@@ -44,7 +44,7 @@ export const routes = [
   {
     name: 'planets',
     path: '/planets',
-    component: () => import('../views/PlanetView.vue'),
+    component: () => import('./routes/(planets)/planet.vue'),
     beforeEnter: async (
       to: RouteLocationNormalized,
       from: RouteLocationNormalizedLoaded,
