@@ -4,10 +4,10 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
 import App from './App.vue';
-import router from './router';
 import DefaultLayout from './components/layouts/DefaultLayout.vue';
 import LoggedLayout from './components/layouts/LoggedLayout.vue';
 import { QueryClient, VueQueryPlugin, type VueQueryPluginOptions } from '@tanstack/vue-query';
+import router from './app/router';
 
 const app = createApp(App);
 

@@ -16,7 +16,7 @@ export const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/HomeView.vue'),
+    component: () => import('./routes/index.vue'),
     meta: {
       layout: 'DefaultLayout',
     },
@@ -35,7 +35,7 @@ export const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('../views/AboutView.vue'),
+    component: () => import('./routes/about.vue'),
     meta: {
       layout: 'LoggedLayout',
       requireAuth: true,
@@ -69,32 +69,38 @@ export const routes = [
     component: () => import('../views/PlanetViewReactive.vue'),
   },
   {
-    name: 'list_movies',
     path: '/movies',
-    component: () => import('../views/ListMovie.vue'),
-    beforeEnter: async (
-      to: RouteLocationNormalized,
-      from: RouteLocationNormalizedLoaded,
-      next: NavigationGuardNext,
-    ) => {
-      //  await usePlanetStore().getData();
-      /* usePlanetStore().$subscribe((mutation) => {
-        console.log(mutation);
-      });*/
-      // if (useMovieStore().movies.length === 0) await useMovieStore().getData();
-      next();
-    },
+    children: [
+      {
+        name: 'list_movies',
+        path: '',
+        component: () => import('./routes/movies/index.vue'),
+        beforeEnter: async (
+          to: RouteLocationNormalized,
+          from: RouteLocationNormalizedLoaded,
+          next: NavigationGuardNext,
+        ) => {
+          //  await usePlanetStore().getData();
+          /* usePlanetStore().$subscribe((mutation) => {
+                console.log(mutation);
+              });*/
+          // if (useMovieStore().movies.length === 0) await useMovieStore().getData();
+          next();
+        },
+      },
+      {
+        name: 'create_movie',
+        path: '/create',
+        component: () => import('./routes/movies/create.vue'),
+      },
+      {
+        name: 'update_movie',
+        path: '/update/:id',
+        component: () => import('../views/EditMovie.vue'),
+      },
+    ],
   },
-  {
-    name: 'create_movie',
-    path: '/movies/create',
-    component: () => import('../views/CreateMovie.vue'),
-  },
-  {
-    name: 'update_movie',
-    path: '/movies/update/:id',
-    component: () => import('../views/EditMovie.vue'),
-  },
+
   {
     name: 'encore_planets',
     path: '/encore-planets',
